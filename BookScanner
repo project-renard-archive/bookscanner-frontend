@@ -1,0 +1,208 @@
+#!/usr/bin/env perl
+# vim: fdm=marker
+use Mojolicious::Lite;
+
+use strict;
+use Moo;
+use File::Slurp qw(write_file read_file);
+use Mojolicious::Plugin::RenderFile;
+use Path::Class;
+use Try::Tiny;
+
+plugin 'RenderFile';
+
+
+app->types->type(coffee => 'text/coffeescript; charset=utf-8');
+
+my $path = dir('.')->subdir('scan')->absolute;
+$path->mkpath;
+
+my $carousel_js = dir('.')->subdir('jsor-jcarousel-247c651/lib')->file('jquery.jcarousel.min.js')->absolute;
+my $carousel_css = dir('.')->subdir('jsor-jcarousel-247c651/skins/tango')->absolute;
+
+
+my $cur_id = 0;
+
+
+# Webcam {{{
+helper webcam_get_address => sub {
+	my ($self, $path) = @_;
+	my $uri = Mojo::URL->new($self->session('webcam-address'));
+	$uri->path($path) if $path;
+	$uri;
+};
+
+helper webcam_get_mjpg_url => sub { shift->webcam_get_address('/video') };
+helper webcam_get_picture_url => sub { shift->webcam_get_address('/photo.jpg') } ;
+helper webcam_get_picture_autofocus_url => sub { shift->webcam_get_address('/photoaf.jpg') };
+
+helper webcam_torchon => sub { my ($self) =@_; $self->ua->get($self->get_webcam_address('/torchon')) };
+
+helper webcam_retrieve_picture => sub {
+	my ($self, @args) = @_;
+	my %options = @args;
+	my $url = $self->webcam_get_picture_url;
+	use DDP; p $url;
+	$url = $self->webcam_get_picture_autofocus_url() if( $options{autofocus} );
+	try {
+		$self->ua->get($url)->res->body;
+	} catch {
+		die "could not get image: $_";
+	}
+};
+# }}}
+
+helper picture_file => sub {
+	my ($self, $id) = @_;
+	$path->file("$id.jpg");
+};
+
+helper acquire_picture => sub {
+	my ($self, $id) = @_;
+	my $picture = $self->webcam_retrieve_picture;
+	my $file = $self->picture_file($id);
+	write_file($file, $picture);
+};
+
+
+get '/picture/:id' => sub {
+	my $self = shift;
+	$self->render_file(
+		filepath => $self->picture_file($self->param('id')),
+		format => 'jpeg' );
+};
+
+get '/api/picture' => sub {
+	my $self = shift;
+	my $id = $cur_id;
+	try {
+		$self->acquire_picture($id);
+		$cur_id++;
+		$self->render( json => {
+			id => $id,
+			picture_url => $self->url_for('/picture/' . $id)
+		});
+	} catch {
+		die "$_";
+		# TODO catch
+	};
+};
+
+get '/' => sub {
+	my $self = shift;
+	$self->render('index');
+};
+
+any '/scan' => sub {
+	my $self = shift;
+	if($self->param('address')) {
+		$self->session( 'webcam-address' => $self->param('address') );
+	}
+	$self->param( video_feed_uri => $self->webcam_get_mjpg_url);
+	$self->render( 'scan' );
+};
+
+get '/script/jquery.jcarousel.js' => sub {
+	my $self = shift;
+	$self->render_file( filepath => $carousel_js, format => 'js' )
+};
+
+get '/css/tango/:file' => sub {
+	my $self = shift;
+	my $name =  $self->tx->req->url->path->parts->[-1];
+	$self->render_file( filepath => $carousel_css->file( $name ) );
+};
+
+get '/script/:script' => sub {
+	my $self = shift;
+	$self->render( 'script/'.$self->param('script') );
+};
+
+app->start;
+__DATA__
+
+@@ index.html.ep
+% layout 'default';
+% title 'Welcome';
+IP address of IP Webcam:
+<form name="setup" action="<%= url_for('/scan') %>" method="POST">
+<input name="address"/>
+</form>
+
+@@ scan.html.ep
+% layout 'default';
+% title 'Welcome';
+<div class="video-feed">
+	<img class="video" src="<%= param 'video_feed_uri' %>" alt="Video feed"/>
+</div>
+<div id="scans"><ul id="scan-list" class="jcarousel-clip-horizontal"></ul></div>
+
+@@ layouts/default.html.ep
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/tango/skin.css" rel="stylesheet" />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.3.0/less-1.3.0.min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.3.1/coffee-script.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<%= url_for '/script/jquery.jcarousel.js' %>" type="text/javascript"></script>
+    <script src="<%= url_for '/script/scan.coffee' %>" type="text/coffeescript"></script>
+  </head>
+  <body>
+    <div id="container" tabindex="0">
+      <%= content %>
+    </div>
+  </body>
+</html>
+
+@@ css/style.css
+div.video-feed { width: 75%; margin: auto; }
+img.video { width: 100%; }
+img.scan-image { width: 200px; }
+
+
+@@ script/scan.coffee.ep
+KEY_SPACE = 32
+$ = jQuery
+class Scanner
+  constructor: ->
+    @Setup()
+
+  Setup: ->
+    $('#scan-list').jcarousel
+      initCallback: @InitCarousel
+      scroll: 4
+      vertical: false
+      itemFallbackDimension: 200
+    $("#container").keydown (event) =>
+      key = event.keyCode or event.which
+      switch key
+        when KEY_SPACE then @_HandleSpace()
+        # Let any other key continue its way to keypress.
+        else return true
+      return false
+
+  InitCarousel: (carousel) ->
+    @carousel = carousel
+
+  _HandleSpace: ->
+    @TakePicture()
+
+  TakePicture: ->
+    try
+      $.getJSON '<%= url_for '/api/picture' %>', (json) =>
+        $('#scan-list').jcarousel 'add', json.id, @ImageHTML(json)
+    catch error
+      throw new Error 'could not get picture'
+
+  ImageHTML: (json) ->
+    "<img class='scan-image scan-image-'" +
+      json.id +
+      "' src='" +
+      json.picture_url + "'/>"
+
+new Scanner
