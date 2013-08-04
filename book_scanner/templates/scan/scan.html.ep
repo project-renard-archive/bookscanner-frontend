@@ -1,0 +1,6 @@
+% layout 'default';
+% title 'Scanning';
+<div class="video-feed">
+	<img class="video" src="<%= param 'video_feed_uri' %>" alt="Video feed"/>
+</div>
+<div id="scans"><ul id="scan-list" class="jcarousel-clip-horizontal"></ul></div>

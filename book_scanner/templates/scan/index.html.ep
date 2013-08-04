@@ -1,0 +1,6 @@
+% layout 'default';
+% title 'Welcome';
+IP address of IP Webcam:
+<form name="setup" action="<%= url_for('/scan') %>" method="POST">
+<input name="address"/>
+</form>
