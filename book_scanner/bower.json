@@ -1,0 +1,17 @@
+{
+  "name": "book_scanner",
+  "version": "0.0.0",
+  "main": "public/script/app.coffee",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "git://github.com/documentcloud/backbone.git#~1.0.0",
+    "jquery": "git://github.com/components/jquery.git#~2.0.3",
+    "underscore": "~1.5.1"
+  }
+}
