@@ -1,0 +1,41 @@
+# vim: ft=coffee
+KEY_SPACE = 32
+$ = jQuery
+class Scanner
+  constructor: ->
+    @Setup()
+
+  Setup: ->
+    $('#scan-list').jcarousel
+      initCallback: @InitCarousel
+      scroll: 4
+      vertical: false
+      itemFallbackDimension: 200
+    $("#container").keydown (event) =>
+      key = event.keyCode or event.which
+      switch key
+        when KEY_SPACE then @_HandleSpace()
+        # Let any other key continue its way to keypress.
+        else return true
+      return false
+
+  InitCarousel: (carousel) ->
+    @carousel = carousel
+
+  _HandleSpace: ->
+    @TakePicture()
+
+  TakePicture: ->
+    try
+      $.getJSON '<%= url_for '/api/picture' %>', (json) =>
+        $('#scan-list').jcarousel 'add', json.id, @ImageHTML(json)
+    catch error
+      throw new Error 'could not get picture'
+
+  ImageHTML: (json) ->
+    "<img class='scan-image scan-image-'" +
+      json.id +
+      "' src='" +
+      json.picture_url + "'/>"
+
+new Scanner
