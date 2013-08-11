@@ -3,48 +3,53 @@ package BookScanner::Controller::Scan;
 use Mojo::Base 'Mojolicious::Controller';
 use strict;
 
-# GET,POST /scan {{{
+# POST /scan {{{
 sub scan {
 	my $self = shift;
 	if($self->param('address')) {
 		$self->session( 'webcam-address' => $self->param('address') );
 		$self->scanner->address( $self->param('address') );
+    $self->redirect_to( '/scan/'. $self->param('project') );
 	}
-	$self->session( 'project' => 'default-project' ); # TODO get from form
+}
+#  }}}
+# GET /scan/:project {{{
+sub scan_project {
+	my $self = shift;
+  return $self->redirect_to('/') unless $self->scanner->address;
 	$self->param( video_feed_uri => $self->scanner->mjpeg_url );
 	$self->render();
 }
-#  }}}
+# }}}
 # GET /scan/:project/:image-name {{{
 sub project_scan_img {
   my $self = shift;
   my $project = $self->get_param_project;
   my $scan = $project->get_scan($self->param('image-name'));
 	$self->render_file(
-		filepath => $self->project->filename,
+		filepath => $project->filename,
 		format => $self->scanner->file_format_name ) if defined $scan;
 }
 #  }}}
 # GET /scans/:project {{{
 sub project_scans {
   my $self = shift;
-  my $project_name = $self->param('project');
   return $self->render( json => [
     map { $self->scan_to_uri($_) } @{ $self->get_param_project->scans }
   ]);
 }
 #  }}}
-# GET /script/scan.coffee {{{
-sub script_scan {
-  shift->render( template => 'script/scan', format => 'coffee' );
-}
-# }}}
-# /scan/action/image {{{
+# GET /scan/:project/action/scan [TODO] {{{
 # TODO: acquire picture, return JSON with new scan URI
-sub action_image {
+sub project_action_scan {
   my $self = shift;
   my $scan; # TODO acquire
   $self->render( json => { uri => $self->scan_to_uri() } );
+}
+#  }}}
+# GET /script/setup.coffee?project=:project {{{
+sub script_setup {
+  shift->render( template => 'scan/setup', format => 'coffee' );
 }
 #  }}}
 # Helpers {{{
