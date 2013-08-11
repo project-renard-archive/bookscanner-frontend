@@ -4,15 +4,15 @@
     <title><%= title %></title>
     %= stylesheet '/css/style.css'
 
-    %= javascript '/vendor/jquery/jquery.min.js'
-    %= javascript '/vendor/underscore/underscore-min.js'
-    %= javascript '/vendor/backbone/backbone-min.js'
+    %= javascript '/vendor/jquery/jquery.js'
+    %= javascript '/vendor/underscore/underscore.js'
+    %= javascript '/vendor/backbone/backbone.js'
 
-    %= javascript '/vendor/elastislide/js/jquerypp.custom.js'
-    %= javascript '/vendor/elastislide/js/jquery.elastislide.js'
-    %= stylesheet '/vendor/elastislide/css/elastislide.css'
+    %= javascript '/vendor/elastislide/jquerypp.custom.js'
+    %= javascript '/vendor/elastislide/jquery.elastislide.js'
+    %= stylesheet '/vendor/elastislide/elastislide.css'
 
-    %= javascript 'http://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.3.1/coffee-script.min.js'
+    %= javascript '/vendor/coffee-script/index.js'
     <!--<script src="<%= url_for '/script/model/scan.coffee' %>" type="text/coffeescript"></script>-->
     <!--<script src="<%= url_for '/script/collection/project.coffee' %>" type="text/coffeescript"></script>-->
     <!--<script src="<%= url_for '/script/view/scanview.coffee' %>" type="text/coffeescript"></script>-->
