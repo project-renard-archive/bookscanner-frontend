@@ -16,11 +16,11 @@ sub  _webcam_get_address {
 has address => ( is => 'rw' );
 
 after address => sub {
-  my $self = shift;
-  if(@_) {
-    $self->clear_picture_url;
-    $self->clear_mjpeg_url;
-  }
+	my $self = shift;
+	if(@_) {
+		$self->clear_picture_url;
+		$self->clear_mjpeg_url;
+	}
 };
 
 has autofocus => ( is => 'rw', default => sub { 1 } );
@@ -28,14 +28,14 @@ has autofocus => ( is => 'rw', default => sub { 1 } );
 has picture_url => ( is => 'lazy', clearer => 1 );
 
 sub _build_picture_url {
-  my $self = shift;
-  $self->_webcam_get_address( $self->autofocus ? '/photoaf.jpg' : '/photo.jpg' );
+	my $self = shift;
+	$self->_webcam_get_address( $self->autofocus ? '/photoaf.jpg' : '/photo.jpg' );
 }
 
 has mjpeg_url => ( is => 'lazy', clearer => 1 );
 
 sub _build_mjpeg_url {
-  shift->_webcam_get_address('/video');
+	shift->_webcam_get_address('/video');
 }
 
 has file_format_extension => ( is => 'ro', default => sub { '.jpg' });
