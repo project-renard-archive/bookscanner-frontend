@@ -1,4 +1,7 @@
-div.video-feed { width: 75%; margin: auto; }
+#scan-project { overflow: none }
+#scans { width: 15%; height: 100%; float: left; resize: horizontal }
+#video-feed { width: 75%; float: right; }
 img.video { width: 100%; }
-img.scan-image { width: 200px; }
+img.scan { width: 100%; }
 
+/*#scan-list { list-style-type: none; padding: 0; margin: none }*/

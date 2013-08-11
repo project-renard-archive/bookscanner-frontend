@@ -3,4 +3,5 @@
 IP address of IP Webcam:
 <form name="setup" action="<%= url_for('/scan') %>" method="POST">
 <input name="address"/>
+<input type="hidden" name="project" value="default"/>
 </form>

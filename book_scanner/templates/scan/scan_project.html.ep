@@ -1,0 +1,25 @@
+% layout 'default';
+% title 'Scanning';
+<div id="scan-project">
+
+  <div id="scans">
+    <ul id="scan-list">
+      <!--class="elastislide-list"-->
+      <li><img class="scan" src="http://placekitten.com/200/200"/></li>
+      <li><img class="scan" src="http://placekitten.com/200/200"/></li>
+      <li><img class="scan" src="http://placekitten.com/200/200"/></li>
+      <li><img class="scan" src="http://placekitten.com/200/200"/></li>
+      <li><img class="scan" src="http://placekitten.com/200/200"/></li>
+    </ul>
+  </div>
+
+  <div id="video-feed">
+    <img class="video" src="<%= param 'video_feed_uri' %>" alt="Video feed"/>
+  </div>
+
+</div>
+
+<script id="scan-template" type="text/template">
+  <li><img class="scan" src="{{ scan-image }}"/></li>
+</script>
+<script src="<%= url_for('/scan/'.param('project').'/script/setup.coffee') %>" type="text/coffeescript"></script>
