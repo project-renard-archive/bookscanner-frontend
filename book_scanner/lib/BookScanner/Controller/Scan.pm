@@ -1,6 +1,7 @@
 package BookScanner::Controller::Scan;
 # vim: fdm=marker
 use Mojo::Base 'Mojolicious::Controller';
+use Mojo::JSON 'j';
 use strict;
 
 # POST /scan {{{
@@ -18,6 +19,10 @@ sub scan_project {
 	my $self = shift;
 	return $self->redirect_to('/') unless $self->scanner->address;
 	$self->param( video_feed_uri => $self->scanner->mjpeg_url );
+  $self->param( config => j({
+    project => $self->param('project'),
+    url => $self->url_for( '/scans/' . $self->param('project') ),
+  }) ); # JSON
 	$self->render();
 }
 # }}}

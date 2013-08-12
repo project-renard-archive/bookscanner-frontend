@@ -1,15 +1,16 @@
-app = app || {}
+define ["backbone"
+  "cs!app/view/projectview",
+  "cs!app/collection/project",
+  "module",
+  ],
+  (Backbone, ProjectView, Project, module) ->
+    class app
+      constructor: ->
+        # use {{ template delimiters }}
+        _.templateSettings.interpolate = /\{\{(.+?)\}\}/g
+        _.templateSettings.escape = /\{\{-(.*?)\}\}/g
 
-# use {{ template delimiters }}
-_.templateSettings.interpolate = /\{\{(.+?)\}\}/g
-_.templateSettings.escape = /\{\{-(.*?)\}\}/g
-
-#window.start_app = ( url ) ->
-  #collection = new app.Project
-    #url: url
-  #new app.ProjectView
-    #collection: collection
-
-#$ ->
-  #new app.ProjectView()
-
+        collection = new Project
+          url: module.config().url
+        new ProjectView
+          collection: collection

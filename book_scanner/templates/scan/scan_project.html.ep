@@ -22,4 +22,12 @@
 <script id="scan-template" type="text/template">
   <li><img class="scan" src="{{ scan-image }}"/></li>
 </script>
-<script src="<%= url_for('/scan/'.param('project').'/script/setup.coffee') %>" type="text/coffeescript"></script>
+%= javascript begin
+  var require = {
+    config: {
+      "cs!app/app": <%== param 'config' %>
+    }
+  };
+% end
+
+<script data-main="<%= url_for '/script/setup.js' %>" src="<%= url_for '/vendor/requirejs/require.js' %>"></script>

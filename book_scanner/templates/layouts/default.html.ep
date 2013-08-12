@@ -4,21 +4,9 @@
     <title><%= title %></title>
     %= stylesheet '/css/style.css'
 
-    %= javascript '/vendor/jquery/jquery.js'
-    %= javascript '/vendor/underscore/underscore.js'
-    %= javascript '/vendor/backbone/backbone.js'
-
-    %= javascript '/vendor/elastislide/jquerypp.custom.js'
-    %= javascript '/vendor/elastislide/jquery.elastislide.js'
-    %= stylesheet '/vendor/elastislide/elastislide.css'
-
-    %= javascript '/vendor/coffee-script/index.js'
-    <!--<script src="<%= url_for '/script/model/scan.coffee' %>" type="text/coffeescript"></script>-->
-    <!--<script src="<%= url_for '/script/collection/project.coffee' %>" type="text/coffeescript"></script>-->
-    <!--<script src="<%= url_for '/script/view/scanview.coffee' %>" type="text/coffeescript"></script>-->
-    <!--<script src="<%= url_for '/script/view/projectview.coffee' %>" type="text/coffeescript"></script>-->
-    <!--<script src="<%= url_for '/script/app.coffee' %>" type="text/coffeescript"></script>-->
-    %= javascript '/script/app-min.js'
+    <!--%= javascript '/vendor/elastislide/jquerypp.custom.js'-->
+    <!--%= javascript '/vendor/elastislide/jquery.elastislide.js'-->
+    <!--%= stylesheet '/vendor/elastislide/elastislide.css'-->
   </head>
   <body>
     <div id="container" tabindex="0">
