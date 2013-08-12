@@ -25,7 +25,8 @@
 %= javascript begin
   var require = {
     config: {
-      "cs!app/app": <%== param 'config' %>
+      "cs!app/app": <%== param 'app_config' %>,
+      "cs!app/view/projectview": <%== param 'projectview_config' %>
     }
   };
 % end

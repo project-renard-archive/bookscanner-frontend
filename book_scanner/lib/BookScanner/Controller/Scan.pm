@@ -19,9 +19,12 @@ sub scan_project {
 	my $self = shift;
 	return $self->redirect_to('/') unless $self->scanner->address;
 	$self->param( video_feed_uri => $self->scanner->mjpeg_url );
-  $self->param( config => j({
+  $self->param( app_config => j({
     project => $self->param('project'),
     url => $self->url_for( '/scans/' . $self->param('project') ),
+  }) ); # JSON
+  $self->param( projectview_config => j({
+    scan_url => $self->url_for( '/scan/' . $self->param('project') . '/action/scan' ),
   }) ); # JSON
 	$self->render();
 }
