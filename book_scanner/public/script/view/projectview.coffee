@@ -18,6 +18,13 @@ define [ "module", "backbone",
       @render
       $(@event_el).on('keypress', @_handle_key)
 
+      # create a vertical carousel
+      $(@el).elastislide
+        orientation : 'vertical'
+        minItems: 1
+      @carousel = $(@el).data().elastislide # to get around the broken code in elastislide
+      #$(@el).html('')
+
       @listenTo @collection, 'add', @_render_scan
       @listenTo @collection, 'reset', @render
 
@@ -29,6 +36,7 @@ define [ "module", "backbone",
       scan_view = new ScanView
         model: item
       $(@el).append scan_view.render().el
+      @carousel.add() # update carousel
 
     _handle_key: (e) =>
       key = event.keyCode or event.which

@@ -2,11 +2,8 @@
 <html>
   <head>
     <title><%= title %></title>
+    %= stylesheet '/vendor/elastislide/elastislide.css'
     %= stylesheet '/css/style.css'
-
-    <!--%= javascript '/vendor/elastislide/jquerypp.custom.js'-->
-    <!--%= javascript '/vendor/elastislide/jquery.elastislide.js'-->
-    <!--%= stylesheet '/vendor/elastislide/elastislide.css'-->
   </head>
   <body>
     <div id="container" tabindex="0">
