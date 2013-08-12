@@ -6,8 +6,7 @@ define [ "backbone", "cs!app/collection/project" ], (Backbone, Project) ->
       # TODO event to scan when hit spacebar
       events: {}
 
-      initialize: (attr, options) ->
+      initialize: () ->
         console.log 'init view'
-        @collection = attr.collection if attr and 'collection' of attr
         @collection.fetch({ reset: true })
         # TODO fetch collection

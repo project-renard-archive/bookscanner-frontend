@@ -10,7 +10,7 @@ define ["backbone"
         _.templateSettings.interpolate = /\{\{(.+?)\}\}/g
         _.templateSettings.escape = /\{\{-(.*?)\}\}/g
 
-        collection = new Project
+        collection = new Project [],
           url: module.config().url
         new ProjectView
           collection: collection
