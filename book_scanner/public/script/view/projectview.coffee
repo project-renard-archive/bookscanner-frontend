@@ -1,7 +1,7 @@
 app = app || {}
 define [ "module", "backbone",
   "cs!app/collection/project"
-  "cs!app/view/scanview", "elastislide" ],
+  "cs!app/view/scanview", "jquery.scrollTo" ],
 (module, Backbone, Project, ScanView) ->
   KEY_SPACE = 32
   class app.ProjectView extends Backbone.View
@@ -18,13 +18,6 @@ define [ "module", "backbone",
       @render
       $(@event_el).on('keypress', @_handle_key)
 
-      # create a vertical carousel
-      $(@el).elastislide
-        orientation : 'vertical'
-        minItems: 1
-      @carousel = $(@el).data().elastislide # to get around the broken code in elastislide
-      #$(@el).html('')
-
       @listenTo @collection, 'add', @_render_scan
       @listenTo @collection, 'reset', @render
 
@@ -35,8 +28,9 @@ define [ "module", "backbone",
     _render_scan: (item) ->
       scan_view = new ScanView
         model: item
-      $(@el).append scan_view.render().el
-      @carousel.add() # update carousel
+      scan_el = scan_view.render().el
+      $(@el).append scan_el
+      $(@event_el).scrollTo(scan_el)
 
     _handle_key: (e) =>
       key = event.keyCode or event.which

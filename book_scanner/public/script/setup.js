@@ -9,21 +9,15 @@ require.config({
       deps: ["underscore", "jquery"],
       exports: "Backbone"
     },
-    "elastislide": {
-      deps: ["elastislide/jquerypp.custom", "elastislide/modernizr.custom.17475"]
-    },
-    "elastislide/jquerypp.custom" : {
+    "jquery.scrollTo" : {
       deps: ["jquery"]
     },
-    "elastislide/modernizr.custom.17475": {
-      exports: "Modernizr"
-    }
   },
   packages: [
     { name: 'jquery', main: 'jquery' },
+    { name: 'jquery.scrollTo', location: 'jquery.scrollTo', main: 'jquery.scrollTo' },
     { name: 'underscore', main: 'underscore' },
     { name: 'backbone', main: 'backbone' },
-    { name: 'elastislide', main: 'jquery.elastislide' },
     {
       name: 'cs',
       location: 'require-cs',

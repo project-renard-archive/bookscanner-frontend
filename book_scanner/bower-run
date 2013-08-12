@@ -1,2 +1,1 @@
 bower-installer
-perl -pi -e 's,\Qurl(../images/\E,url(./,g' public/vendor/elastislide/elastislide.css
