@@ -20,7 +20,7 @@
 </div>
 
 <script id="scan-template" type="text/template">
-  <li><img class="scan" src="{{ scan-image }}"/></li>
+  <img class="scan" src="{{ data['scan-image'] }}"/>
 </script>
 %= javascript begin
   var require = {

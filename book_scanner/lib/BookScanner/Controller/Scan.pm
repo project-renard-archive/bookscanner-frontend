@@ -40,7 +40,7 @@ sub project_scan_img {
 sub project_scans {
 	my $self = shift;
 	return $self->render( json => [
-		map { $self->scan_to_uri($_) } @{ $self->get_param_project->scans }
+		map { $self->scan_ToJSON($_) } @{ $self->get_param_project->scans }
 	]);
 }
 #  }}}
@@ -49,12 +49,8 @@ sub project_scans {
 sub project_action_scan {
 	my $self = shift;
 	my $scan; # TODO acquire
-	$self->render( json => { uri => $self->scan_to_uri() } );
-}
-#  }}}
-# GET /script/setup.coffee?project=:project {{{
-sub script_setup {
-	shift->render( template => 'scan/setup', format => 'coffee' );
+	#$self->render( json => { uri => $self->scan_to_uri() } );
+  $self->render( json =>  { 'scan-image' => 'http://placekitten.com/200/200' } );
 }
 #  }}}
 # Helpers {{{
@@ -63,6 +59,10 @@ sub get_param_project {
 	$self->scandir->get_project( $self->param('project') ) if $self->param('project');
 }
 
+sub scan_ToJSON {
+	my ($self, $scan) = @_;
+  { 'scan-image' => $self->scan_to_uri($scan) };
+}
 # map to project_scan_img()
 sub scan_to_uri {
 	my ($self, $scan) = @_;
