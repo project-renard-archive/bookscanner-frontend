@@ -50,4 +50,16 @@ sub new_scan {
 	BookScanner::Model::Scan->new( scanproject => $self );
 }
 
+=method get_scan($image_name)
+
+retrieves the scan with the image name
+
+=cut
+sub get_scan {
+  my ($self, $fname) = @_;
+  BookScanner::Model::Scan->new( filename => dir($self->directory)->file($fname)->absolute,
+    scanproject => $self );
+}
+
+
 1;

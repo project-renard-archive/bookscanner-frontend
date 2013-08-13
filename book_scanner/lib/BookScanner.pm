@@ -33,7 +33,7 @@ sub startup {
 	$r->post('/scan')->to('scan#scan');
 	$r->any('/scan/:project')->to('scan#scan_project');
 
-	$r->get('/scan/:project/:image-name')->to('scan#project_scan_img');
+	$r->get('/scan/:project/:image_name')->to('scan#project_scan_img');
 	$r->get('/scans/:project')->to('scan#project_scans');
 	$r->get('/scan/:project/action/scan')->to('scan#project_action_scan');
 

@@ -14,7 +14,7 @@ use File::Touch;
 The L<BookScanner::Model::ScanProject> for this scan. Required.
 
 =cut 
-has scanproject => ( is => 'rw', weak_ref => 1, required => 1 );
+has scanproject => ( is => 'rw', required => 1 );
 
 =attr creation_time
 
