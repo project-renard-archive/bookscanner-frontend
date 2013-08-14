@@ -1,0 +1,4 @@
+#!/bin/sh
+mkdir out
+for i in `ls`; do echo $i; convert -verbose -resize 1500 $i out/$i; done
+convert -verbose out/*.jpg out/book.pdf
