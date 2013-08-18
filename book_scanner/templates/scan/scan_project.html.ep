@@ -14,7 +14,7 @@
 </div>
 
 <script id="scan-template" type="text/template">
-  <img class="scan" src="{{ data['scan-image'] }}"/>
+  <img class="scan" src="{{- data['scan-image'] }}"/>
 </script>
 %= javascript begin
   var require = {
