@@ -8,7 +8,7 @@ with 'BookScanner::Model::Scanner';
 
 sub  _webcam_get_address {
 	my ($self, $path) = @_;
-	my $uri = Mojo::URL->new($self->address);
+	my $uri = Mojo::URL->new('http://'.$self->address);
 	$uri->path($path) if $path;
 	$uri;
 }
