@@ -3,7 +3,7 @@ requires 'Mojolicious::Plugin::RenderFile';
 requires 'File::Touch';
 requires 'DateTime';
 requires 'DateTime::Format::W3CDTF';
-requires 'File::Slurp';
+requires 'File::Slurp::Tiny';
 requires 'List::UtilsBy';
 requires 'Moo';
 requires 'Path::Class';

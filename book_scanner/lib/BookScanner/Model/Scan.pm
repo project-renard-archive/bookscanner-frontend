@@ -6,7 +6,7 @@ use DateTime;
 use DateTime::Format::W3CDTF;
 use Moo;
 use Path::Class;
-use File::Slurp qw(write_file read_file);
+use File::Slurp::Tiny qw(write_file read_file);
 use File::Touch;
 
 =attr scanproject
